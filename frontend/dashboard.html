@@ -1,0 +1,296 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Smart AR Shopping - Dashboard</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+<style>
+
+:root{
+--gradient: linear-gradient(135deg,#ff6fd8,#8e2de2);
+}
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:'Poppins',sans-serif;
+}
+
+body{
+min-height:100vh;
+display:flex;
+align-items:center;
+justify-content:center;
+background:url('https://cdn.pixabay.com/photo/2017/02/23/13/05/shopping-2091673_1280.jpg') no-repeat center center/cover;
+}
+
+/* MAIN CONTAINER */
+
+.container{
+width:90%;
+max-width:1100px;
+display:flex;
+border-radius:25px;
+background:rgba(255,255,255,0.92);
+backdrop-filter:blur(15px);
+box-shadow:0 15px 50px rgba(0,0,0,0.2);
+overflow:hidden;
+}
+
+/* LEFT SIDE */
+
+.left{
+flex:1;
+background:var(--gradient);
+display:flex;
+flex-direction:column;
+align-items:center;
+justify-content:center;
+color:white;
+padding:50px;
+text-align:center;
+}
+
+.left h1{
+font-size:28px;
+}
+
+/* RIGHT SIDE */
+
+.right{
+flex:2;
+padding:40px;
+}
+
+/* HEADER */
+
+.header{
+display:flex;
+justify-content:space-between;
+align-items:center;
+margin-bottom:30px;
+}
+
+.header h2{
+color:#8e2de2;
+}
+
+.logout-btn{
+padding:8px 18px;
+border:none;
+border-radius:8px;
+background:var(--gradient);
+color:white;
+cursor:pointer;
+transition:0.3s;
+}
+
+.logout-btn:hover{
+transform:translateY(-3px);
+box-shadow:0 8px 20px rgba(255,111,216,0.6);
+}
+
+/* DASHBOARD CARDS */
+
+.cards{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+gap:20px;
+}
+
+.card{
+background:white;
+padding:25px;
+border-radius:15px;
+text-align:center;
+box-shadow:0 10px 25px rgba(0,0,0,0.08);
+transition:0.3s;
+cursor:pointer;
+}
+
+.card:hover{
+transform:translateY(-5px);
+box-shadow:0 15px 30px rgba(0,0,0,0.15);
+}
+
+.card h3{
+margin-bottom:10px;
+color:#8e2de2;
+}
+
+.card p{
+font-size:14px;
+color:#555;
+}
+
+/* RESPONSIVE */
+
+@media(max-width:900px){
+
+.container{
+flex-direction:column;
+}
+
+.left{
+display:none;
+}
+
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<!-- LEFT SIDE -->
+
+<div class="left">
+
+<h1>Smart AR Shopping</h1>
+
+<p>Welcome to your dashboard.<br>
+Experience AR shopping!</p>
+
+</div>
+
+
+<!-- RIGHT SIDE -->
+
+<div class="right">
+
+<div class="header">
+
+<h2>Welcome, <span id="username"></span> 👋</h2>
+
+<button class="logout-btn" onclick="logout()">
+Logout
+</button>
+
+</div>
+
+
+<div class="cards">
+
+<!-- PRODUCTS -->
+
+<div class="card" onclick="openCatalog()">
+
+<h3>🛍 Products</h3>
+
+<p>Browse and explore AR enabled products.</p>
+
+</div>
+
+
+<!-- ORDERS -->
+
+<div class="card" onclick="openOrders()">
+
+<h3>📦 Orders</h3>
+
+<p>Track and manage your orders easily.</p>
+
+</div>
+
+
+<!-- WISHLIST -->
+
+<div class="card" onclick="goToWishlist()">
+
+<h3>❤️ Wishlist</h3>
+
+<p>View your saved favourite products.</p>
+
+</div>
+
+
+<!-- PROFILE -->
+
+<div class="card" onclick="goToProfile()">
+
+<h3>👤 Profile</h3>
+
+<p>Manage your account information.</p>
+
+</div>
+
+
+<!-- CART -->
+
+<div class="card" onclick="goToCart()">
+
+<h3>🛒 Cart</h3>
+
+<p>View products added to your cart.</p>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+
+<script>
+
+/* SHOW USERNAME */
+
+document.getElementById("username").innerText =
+localStorage.getItem("loggedInUser") || "User";
+
+
+/* PAGE REDIRECTS */
+
+function openCatalog(){
+
+window.location.href="catalog.html";
+
+}
+
+function openOrders(){
+
+window.location.href="orders.html";
+
+}
+
+function goToWishlist(){
+
+window.location.href="wishlist.html";
+
+}
+
+function goToProfile(){
+
+window.location.href="profile.html";
+
+}
+
+function goToCart(){
+
+window.location.href="cart.html";
+
+}
+
+
+/* LOGOUT */
+
+function logout(){
+
+localStorage.clear();
+
+window.location.href="login.html";
+
+}
+
+</script>
+
+</body>
+</html>
+

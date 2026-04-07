@@ -1,0 +1,367 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>User Profile</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+<style>
+
+:root{
+--gradient:linear-gradient(135deg,#ff6fd8,#8e2de2);
+--success:#16a34a;
+}
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:'Poppins',sans-serif;
+}
+
+body{
+min-height:100vh;
+display:flex;
+align-items:center;
+justify-content:center;
+background:#f3f3f3;
+}
+
+/* MAIN CONTAINER */
+
+.container{
+width:90%;
+max-width:1100px;
+display:flex;
+border-radius:20px;
+background:white;
+box-shadow:0 10px 30px rgba(0,0,0,0.1);
+overflow:hidden;
+}
+
+/* LEFT PANEL */
+
+.left{
+flex:1;
+background:var(--gradient);
+display:flex;
+flex-direction:column;
+align-items:center;
+justify-content:center;
+color:white;
+padding:40px;
+text-align:center;
+}
+
+.profile-upload{
+width:140px;
+height:140px;
+border-radius:50%;
+border:4px solid white;
+overflow:hidden;
+cursor:pointer;
+margin-bottom:20px;
+position:relative;
+}
+
+.profile-upload img{
+width:100%;
+height:100%;
+object-fit:cover;
+}
+
+.profile-upload::after{
+content:"Upload";
+position:absolute;
+bottom:0;
+width:100%;
+background:rgba(0,0,0,0.6);
+color:white;
+font-size:12px;
+text-align:center;
+padding:4px;
+opacity:0;
+transition:0.3s;
+}
+
+.profile-upload:hover::after{
+opacity:1;
+}
+
+/* RIGHT PANEL */
+
+.right{
+flex:2;
+padding:40px;
+}
+
+.header{
+display:flex;
+justify-content:space-between;
+align-items:center;
+margin-bottom:20px;
+}
+
+.header h2{
+color:#8e2de2;
+}
+
+.logout-btn{
+padding:8px 16px;
+border:none;
+border-radius:6px;
+background:var(--gradient);
+color:white;
+cursor:pointer;
+}
+
+/* FORM */
+
+.input-group{
+margin-bottom:15px;
+}
+
+.input-group label{
+font-size:13px;
+font-weight:500;
+}
+
+.input-group input,
+.input-group textarea{
+width:100%;
+padding:10px;
+margin-top:5px;
+border:1px solid #ddd;
+border-radius:6px;
+background:#fafafa;
+resize:none;
+}
+
+.btn{
+margin-top:8px;
+padding:8px 15px;
+border:none;
+border-radius:6px;
+background:var(--gradient);
+color:white;
+cursor:pointer;
+font-size:13px;
+}
+
+.save-btn{
+width:100%;
+padding:12px;
+margin-top:10px;
+}
+
+.success{
+margin-top:10px;
+font-size:13px;
+color:var(--success);
+display:none;
+}
+
+.success.show{
+display:block;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<!-- LEFT PROFILE SECTION -->
+
+<div class="left">
+
+<label class="profile-upload">
+
+<img id="profileImage"
+src="https://cdn-icons-png.flaticon.com/512/149/149071.png">
+
+<input type="file" id="imageUpload" hidden>
+
+</label>
+
+<h2>User Profile</h2>
+
+</div>
+
+<!-- RIGHT SETTINGS -->
+
+<div class="right">
+
+<div class="header">
+<h2>Profile Settings</h2>
+<button class="logout-btn" onclick="logout()">Logout</button>
+</div>
+
+<!-- PROFILE DETAILS -->
+
+<div class="input-group">
+<label>Full Name</label>
+<input type="text">
+</div>
+
+<div class="input-group">
+<label>Email</label>
+<input type="email">
+</div>
+
+<div class="input-group">
+<label>Phone</label>
+<input type="text">
+</div>
+
+<div class="input-group">
+<label>Address</label>
+<input type="text">
+</div>
+
+<button class="btn save-btn" onclick="showMsg('profileMsg')">
+Save Profile
+</button>
+
+<div id="profileMsg" class="success">
+✔ Profile Updated
+</div>
+
+<hr style="margin:25px 0">
+
+<!-- FEEDBACK -->
+
+<div class="input-group">
+
+<label>Feedback</label>
+
+<textarea id="feedbackText" rows="3" placeholder="Enter your feedback"></textarea>
+
+<button class="btn" onclick="submitFeedback()">
+Submit Feedback
+</button>
+
+<div id="feedbackMsg" class="success">
+✔ Feedback Submitted
+</div>
+
+</div>
+
+<!-- QUERY -->
+
+<div class="input-group">
+
+<label>Queries</label>
+
+<textarea id="queryText" rows="3" placeholder="Enter your query"></textarea>
+
+<button class="btn" onclick="submitQuery()">
+Submit Query
+</button>
+
+<div id="queryMsg" class="success">
+✔ Query Submitted
+</div>
+
+</div>
+
+</div>
+</div>
+
+<script>
+
+/* PROFILE IMAGE UPLOAD */
+
+document.getElementById("imageUpload").addEventListener("change",function(e){
+
+let file=e.target.files[0];
+
+if(file){
+
+let reader=new FileReader();
+
+reader.onload=function(event){
+document.getElementById("profileImage").src=event.target.result;
+}
+
+reader.readAsDataURL(file);
+
+}
+
+});
+
+/* SUCCESS MESSAGE */
+
+function showMsg(id){
+
+let msg=document.getElementById(id);
+
+msg.classList.add("show");
+
+setTimeout(()=>{
+msg.classList.remove("show");
+},2000);
+
+}
+
+/* FEEDBACK STORAGE */
+
+function submitFeedback(){
+
+let feedback=document.getElementById("feedbackText").value;
+
+if(feedback.trim()!==""){
+
+let list=JSON.parse(localStorage.getItem("feedbackList"))||[];
+
+list.push(feedback);
+
+localStorage.setItem("feedbackList",JSON.stringify(list));
+
+document.getElementById("feedbackText").value="";
+
+showMsg("feedbackMsg");
+
+}
+
+}
+
+/* QUERY STORAGE */
+
+function submitQuery(){
+
+let query=document.getElementById("queryText").value;
+
+if(query.trim()!==""){
+
+let list=JSON.parse(localStorage.getItem("queryList"))||[];
+
+list.push(query);
+
+localStorage.setItem("queryList",JSON.stringify(list));
+
+document.getElementById("queryText").value="";
+
+showMsg("queryMsg");
+
+}
+
+}
+
+/* LOGOUT */
+
+function logout(){
+
+window.location.href="login.html";
+
+}
+
+</script>
+
+</body>
+</html>
+

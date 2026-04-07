@@ -1,0 +1,151 @@
+/* ===============================
+SMART AR SHOPPING – CATALOG CSS
+=============================== */
+
+*{
+box-sizing:border-box;
+font-family:'Segoe UI',sans-serif;
+}
+
+/* BODY BACKGROUND */
+
+body{
+margin:0;
+background:linear-gradient(135deg,#ff6fd8,#8e2de2);
+color:white;
+}
+
+/* NAVBAR */
+
+.navbar{
+background:rgba(0,0,0,0.35);
+backdrop-filter:blur(10px);
+padding:20px;
+text-align:center;
+font-size:22px;
+font-weight:600;
+box-shadow:0 4px 15px rgba(0,0,0,0.3);
+}
+
+/* FILTER BUTTONS */
+
+.filter{
+display:flex;
+justify-content:center;
+gap:15px;
+padding:25px;
+flex-wrap:wrap;
+}
+
+.filter button{
+padding:10px 22px;
+border:none;
+background:white;
+color:#333;
+border-radius:25px;
+cursor:pointer;
+transition:0.3s;
+font-weight:500;
+}
+
+.filter button:hover{
+transform:translateY(-3px);
+}
+
+.filter button.active{
+background:#111;
+color:white;
+}
+
+/* PRODUCT GRID */
+
+.grid{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+gap:28px;
+padding:30px;
+}
+
+/* PRODUCT CARD */
+
+.card{
+background:white;
+border-radius:18px;
+box-shadow:0 15px 30px rgba(0,0,0,0.25);
+overflow:hidden;
+transition:0.3s;
+text-align:center;
+padding-bottom:18px;
+cursor:pointer;
+color:#222;
+}
+
+.card:hover{
+transform:translateY(-10px);
+box-shadow:0 25px 45px rgba(0,0,0,0.35);
+}
+
+/* 3D MODEL VIEWER */
+
+model-viewer{
+width:100%;
+height:220px;
+background:#ffffff;
+}
+
+/* PRODUCT TEXT */
+
+.card h3{
+margin:15px 0 5px;
+font-size:18px;
+}
+
+.card p{
+margin:0;
+font-size:14px;
+color:#666;
+}
+
+.price{
+font-size:20px;
+font-weight:bold;
+margin:12px 0 5px;
+}
+
+/* AR BUTTON */
+
+.ar-btn{
+width:85%;
+margin-top:10px;
+padding:12px;
+border:none;
+border-radius:12px;
+background:linear-gradient(135deg,#ff6fd8,#8e2de2);
+color:white;
+font-weight:600;
+cursor:pointer;
+transition:0.3s;
+}
+
+.ar-btn:hover{
+transform:scale(1.05);
+box-shadow:0 8px 20px rgba(255, 0, 247, 0);
+}
+
+/* MOBILE */
+
+@media(max-width:600px){
+
+.grid{
+padding:15px;
+}
+
+model-viewer{
+height:200px;
+}
+
+.navbar{
+font-size:18px;
+}
+
+}

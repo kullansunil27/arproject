@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Admin Panel</title>
+<link rel="stylesheet" href="css/main.css">
+
+<style>
+
+.admin-container{
+display:flex;
+gap:30px;
+flex-wrap:wrap;
+margin-top:30px;
+}
+
+.box{
+background:#fff;
+padding:20px;
+border-radius:10px;
+box-shadow:0 5px 15px rgba(0,0,0,0.1);
+flex:1;
+min-width:300px;
+}
+
+.box h3{
+margin-bottom:15px;
+color:#8e2de2;
+}
+
+.item{
+background:#f7f7f7;
+padding:10px;
+margin-bottom:8px;
+border-radius:6px;
+}
+
+</style>
+</head>
+
+<body>
+
+<!-- ADD PRODUCT -->
+
+<div class="form-box">
+<h2>Add Product</h2>
+
+<input type="text" id="name" placeholder="Product Name">
+<input type="text" id="category" placeholder="Category">
+<input type="number" id="price" placeholder="Price">
+<input type="text" id="model" placeholder="Model Path">
+
+<button class="btn" onclick="addProduct()">Add</button>
+
+</div>
+
+<!-- FEEDBACK & QUERY SECTION -->
+
+<div class="admin-container">
+
+<div class="box">
+
+<h3>User Feedback</h3>
+<div id="feedbackList"></div>
+
+</div>
+
+<div class="box">
+
+<h3>User Queries</h3>
+<div id="queryList"></div>
+
+</div>
+
+</div>
+
+<script src="js/page-utils.js"></script>
+<script src="js/admin.js"></script>
+
+<script>
+
+/* LOAD FEEDBACK */
+
+function loadFeedback(){
+
+let feedback = JSON.parse(localStorage.getItem("feedbackList")) || [];
+
+let html="";
+
+feedback.forEach((item)=>{
+html += `<div class="item">${item}</div>`;
+});
+
+document.getElementById("feedbackList").innerHTML = html;
+
+}
+
+/* LOAD QUERY */
+
+function loadQueries(){
+
+let queries = JSON.parse(localStorage.getItem("queryList")) || [];
+
+let html="";
+
+queries.forEach((item)=>{
+html += `<div class="item">${item}</div>`;
+});
+
+document.getElementById("queryList").innerHTML = html;
+
+}
+
+loadFeedback();
+loadQueries();
+
+</script>
+
+</body>
+</html>

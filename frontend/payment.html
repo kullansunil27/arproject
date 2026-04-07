@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Payment</title>
+
+<style>
+
+body{
+font-family:Segoe UI;
+margin:0;
+background:linear-gradient(135deg,#ff6fd8,#8e2de2);
+color:white;
+padding:40px;
+}
+
+.container{
+max-width:500px;
+margin:auto;
+background:rgba(0,0,0,0.25);
+padding:30px;
+border-radius:12px;
+}
+
+button{
+background:linear-gradient(135deg,#ff6fd8,#8e2de2);
+border:none;
+padding:12px 20px;
+color:white;
+border-radius:8px;
+cursor:pointer;
+margin-top:10px;
+}
+
+input{
+width:100%;
+padding:12px;
+margin-top:10px;
+border:none;
+border-radius:6px;
+background:linear-gradient(135deg,#ff6fd8,#8e2de2);
+color:white;
+}
+
+.success{
+margin-top:20px;
+background:#00b894;
+padding:12px;
+border-radius:8px;
+display:none;
+}
+
+.ordersBtn{
+float:right;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<button class="ordersBtn" onclick="goOrders()">Orders</button>
+
+<h2>Select Payment Mode</h2>
+
+<button onclick="cod()">Cash On Delivery</button>
+<button onclick="online()">Online Payment</button>
+
+<div id="onlineSection" style="display:none">
+
+<h3>Select UPI</h3>
+
+<button onclick="showPin()">Google Pay</button>
+<button onclick="showPin()">PhonePe</button>
+
+<div id="pinSection" style="display:none">
+
+<h3>Enter PIN</h3>
+
+<input type="password" id="pin">
+
+<button onclick="payNow()">Pay</button>
+
+</div>
+
+</div>
+
+<div id="success" class="success"></div>
+
+</div>
+
+<script>
+
+let productName = localStorage.getItem("cartProductName")
+let productPrice = localStorage.getItem("cartProductPrice")
+
+function generateID(){
+return "ORD"+Math.floor(Math.random()*1000000)
+}
+
+function saveOrder(){
+
+let orders = JSON.parse(localStorage.getItem("orders")) || []
+
+let order = {
+id:generateID(),
+name:productName,
+price:productPrice,
+date:new Date().toLocaleString(),
+status:"Paid",
+track:1
+}
+
+orders.push(order)
+
+localStorage.setItem("orders",JSON.stringify(orders))
+
+}
+
+function cod(){
+
+saveOrder()
+
+document.getElementById("success").style.display="block"
+document.getElementById("success").innerHTML="✅ Order placed successfully (Cash On Delivery)"
+
+}
+
+function online(){
+
+document.getElementById("onlineSection").style.display="block"
+
+}
+
+function showPin(){
+
+document.getElementById("pinSection").style.display="block"
+
+}
+
+function payNow(){
+
+let pin=document.getElementById("pin").value
+
+if(pin==""){
+alert("Enter PIN")
+return
+}
+
+saveOrder()
+
+document.getElementById("success").style.display="block"
+document.getElementById("success").innerHTML="✅ Payment of ₹"+productPrice+" is successful"
+
+}
+
+function goOrders(){
+
+window.location.href="orders.html"
+
+}
+
+</script>
+
+</body>
+</html>

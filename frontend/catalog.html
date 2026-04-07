@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Smart AR Shopping - Catalog</title>
+
+  <!-- Model Viewer -->
+  <script type="module"
+    src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js">
+  </script>
+
+  <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/catalog.css">
+  
+  <style>
+  .nav-buttons {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+  }
+  .nav-btn {
+    background: rgba(255,255,255,0.2);
+    border: 1px solid rgba(255,255,255,0.3);
+    color: white;
+    padding: 8px 16px;
+    margin-left: 10px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 14px;
+    backdrop-filter: blur(10px);
+  }
+  .nav-btn:hover {
+    background: rgba(255,255,255,0.3);
+  }
+  </style>
+</head>
+
+<body>
+
+  <!-- Navbar with Navigation -->
+  <div class="navbar" style="position: relative;">
+    <h2 style="margin: 0;">🛒 Smart AR Shopping</h2>
+    
+    <!-- Navigation Buttons -->
+    <div class="nav-buttons">
+      <button class="nav-btn" onclick="window.location.href='dashboard.html'">Dashboard</button>
+      <button class="nav-btn" onclick="window.location.href='cart.html'">Cart</button>
+      <button class="nav-btn" onclick="window.location.href='profile.html'">Profile</button>
+    </div>
+  </div>
+ 
+  <div class="filter">
+    <button onclick="filterCategory('Furniture', this)">Furniture</button>
+    <button onclick="filterCategory('Home Decor', this)">Home Decor</button>
+    <button onclick="filterCategory('Electronics', this)">Electronics</button>
+    <button onclick="filterCategory('All', this)">All</button>
+  </div>
+
+  <!-- Product Grid -->
+  <div class="grid" id="products">
+    <div class="loading">Loading products...</div>
+  </div>
+
+<script src="js/page-utils.js"></script>
+<script src="js/catalog.js"></script>
+  <script>
+    // Global nav functions
+    function goDashboard() { window.location.href = 'dashboard.html'; }
+    function goCatalog() { window.location.href = 'catalog.html'; }
+    window.goDashboard = goDashboard;
+    window.goCatalog = goCatalog;
+  </script>
+
+</body>
+</html>

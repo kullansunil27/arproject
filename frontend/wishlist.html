@@ -1,0 +1,205 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+<title>Wishlist</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+<style>
+
+:root{
+--gradient:linear-gradient(135deg,#ff6fd8,#8e2de2);
+}
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:'Poppins',sans-serif;
+}
+
+body{
+min-height:100vh;
+background:var(--gradient);
+padding:40px;
+}
+
+/* HEADER */
+
+.header{
+display:flex;
+justify-content:space-between;
+align-items:center;
+margin-bottom:30px;
+color:white;
+}
+
+.header h1{
+font-size:30px;
+}
+
+/* DASHBOARD BUTTON */
+
+.dashboard-btn{
+background:white;
+color:#8e2de2;
+border:none;
+padding:10px 18px;
+border-radius:8px;
+cursor:pointer;
+font-weight:500;
+transition:0.3s;
+}
+
+.dashboard-btn:hover{
+transform:scale(1.05);
+box-shadow:0 5px 15px rgba(0,0,0,0.2);
+}
+
+/* MAIN CONTAINER */
+
+.container{
+background:white;
+padding:30px;
+border-radius:18px;
+box-shadow:0 10px 30px rgba(0,0,0,0.2);
+}
+
+/* WISHLIST ITEM */
+
+.item{
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:15px;
+border-bottom:1px solid #eee;
+}
+
+.item h3{
+margin:0;
+color:#333;
+}
+
+.item p{
+margin:3px 0;
+color:#666;
+font-size:14px;
+}
+
+.price{
+color:#8e2de2;
+font-weight:600;
+}
+
+/* REMOVE BUTTON */
+
+.remove{
+background:linear-gradient(135deg,#ff6fd8,#8e2de2);
+border:none;
+color:white;
+padding:8px 16px;
+border-radius:8px;
+cursor:pointer;
+font-weight:500;
+transition:0.3s;
+}
+
+.remove:hover{
+transform:scale(1.05);
+box-shadow:0 6px 15px rgba(0,0,0,0.2);
+}
+
+/* EMPTY MESSAGE */
+
+.empty{
+text-align:center;
+padding:50px;
+color:#777;
+font-size:18px;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="header">
+
+<h1>❤️ My Wishlist</h1>
+
+<button class="dashboard-btn" onclick="goDashboard()">
+Dashboard
+</button>
+
+</div>
+
+<div class="container">
+
+<div id="wishlistItems"></div>
+
+</div>
+
+<script>
+
+let wishlist = JSON.parse(localStorage.getItem("wishlist")) || [];
+
+let container = document.getElementById("wishlistItems");
+
+if(wishlist.length === 0){
+
+container.innerHTML = "<div class='empty'>Your wishlist is empty ❤️</div>";
+
+}else{
+
+wishlist.forEach((item,index)=>{
+
+container.innerHTML += `
+
+<div class="item">
+
+<div>
+<h3>${item.name}</h3>
+<p>${item.category}</p>
+</div>
+
+<div class="price">
+₹${item.price}
+</div>
+
+<button class="remove" onclick="removeItem(${index})">
+Remove
+</button>
+
+</div>
+
+`;
+
+});
+
+}
+
+/* REMOVE ITEM */
+
+function removeItem(index){
+
+wishlist.splice(index,1);
+
+localStorage.setItem("wishlist",JSON.stringify(wishlist));
+
+location.reload();
+
+}
+
+/* DASHBOARD REDIRECT */
+
+function goDashboard(){
+
+window.location.href="dashboard.html";
+
+}
+
+</script>
+
+</body>
+</html>

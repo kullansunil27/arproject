@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Cart</title>
+
+<style>
+
+body{
+margin:0;
+font-family:Arial, Helvetica, sans-serif;
+background:linear-gradient(135deg,#ff6ec4,#7873f5);
+height:100vh;
+}
+
+.header{
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:25px 40px;
+color:white;
+font-size:28px;
+font-weight:bold;
+}
+
+.dashboard-btn{
+background:white;
+border:none;
+padding:10px 20px;
+border-radius:8px;
+cursor:pointer;
+font-weight:bold;
+color:#7a3cff;
+}
+
+.container{
+width:80%;
+margin:auto;
+background:#f2f2f2;
+border-radius:20px;
+padding:40px;
+}
+
+.cart-item{
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:20px 0;
+border-bottom:1px solid #ddd;
+}
+
+.item-name{
+font-size:20px;
+font-weight:bold;
+}
+
+.item-category{
+color:#777;
+font-size:14px;
+}
+
+.price{
+color:#7a3cff;
+font-weight:bold;
+}
+
+.remove-btn{
+background:linear-gradient(45deg,#ff6ec4,#7873f5);
+border:none;
+padding:10px 20px;
+color:white;
+border-radius:8px;
+cursor:pointer;
+}
+
+.total{
+font-size:24px;
+font-weight:bold;
+margin-top:30px;
+}
+
+.checkout{
+display:flex;
+justify-content:space-between;
+align-items:center;
+margin-top:30px;
+}
+
+.pay-btn{
+background:linear-gradient(45deg,#ff6ec4,#7873f5);
+border:none;
+padding:14px 30px;
+color:white;
+border-radius:10px;
+font-size:16px;
+cursor:pointer;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="header">
+🛒 My Cart
+<button class="dashboard-btn" onclick="goDashboard()">Dashboard</button>
+</div>
+
+<div class="container" id="cartContainer">
+
+</div>
+
+<script>
+
+let cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+function loadCart(){
+
+let container=document.getElementById("cartContainer");
+
+if(cart.length===0){
+container.innerHTML="<h2>Your cart is empty</h2>";
+return;
+}
+
+let html="";
+let total=0;
+
+cart.forEach((item,index)=>{
+
+total+=item.price;
+
+html+=`
+<div class="cart-item">
+
+<div>
+<div class="item-name">${item.name}</div>
+<div class="item-category">${item.category}</div>
+</div>
+
+<div class="price">₹${item.price}</div>
+
+<button class="remove-btn" onclick="removeItem(${index})">Remove</button>
+
+</div>
+`;
+
+});
+
+html+=`
+<div class="checkout">
+
+<div class="total">
+Total: ₹ ${total}
+</div>
+
+<button class="pay-btn" onclick="goPayment()">
+Proceed to Pay
+</button>
+
+</div>
+`;
+
+container.innerHTML=html;
+
+}
+
+function removeItem(index){
+
+cart.splice(index,1);
+
+localStorage.setItem("cart",JSON.stringify(cart));
+
+loadCart();
+
+}
+
+function goPayment(){
+
+window.location.href="payment.html";
+
+}
+
+function goDashboard(){
+
+window.location.href="dashboard.html";
+
+}
+
+loadCart();
+
+</script>
+
+</body>
+</html>
