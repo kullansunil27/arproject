@@ -1,30 +1,31 @@
-const mongoose = require("mongoose");
+const { createClient } = require("@supabase/supabase-js");
 
+let supabase = null;
 let isConnected = false;
 
 const connectDB = async () => {
   try {
-    if (process.env.MONGO_URI) {
-      await mongoose.connect(process.env.MONGO_URI, {
-        authSource: 'admin'
-      });
-      console.log("MongoDB Connected");
-      isConnected = true;
-    } else {
-      console.log("MongoDB URI not configured - running in offline mode");
+    const supabaseUrl = process.env.VITE_SUPABASE_URL;
+    const supabaseKey = process.env.VITE_SUPABASE_SUPABASE_ANON_KEY;
+
+    if (!supabaseUrl || !supabaseKey) {
+      console.log("Supabase credentials not configured - running in offline mode");
       isConnected = false;
+      return;
     }
+
+    supabase = createClient(supabaseUrl, supabaseKey);
+    console.log("Supabase Connected");
+    isConnected = true;
   } catch (error) {
-    console.log("MongoDB connection failed - running in offline mode");
-    console.error('MongoDB Error Details:', error.message);
-    if (error.message.includes('authentication failed')) {
-      console.log('Fix: Check MONGO_URI credentials/IP whitelist in Atlas.');
-    }
+    console.log("Supabase connection failed - running in offline mode");
+    console.error('Supabase Error Details:', error.message);
     isConnected = false;
   }
 };
 
 const getConnectionStatus = () => isConnected;
+const getSupabase = () => supabase;
 
-module.exports = { connectDB, getConnectionStatus };
+module.exports = { connectDB, getConnectionStatus, getSupabase };
 

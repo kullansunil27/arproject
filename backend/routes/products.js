@@ -1,7 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const Product = require("../models/Product");
-const { getConnectionStatus } = require("../config/db");
+const { getConnectionStatus, getSupabase } = require("../config/db");
 
 // Sample products for offline mode
 const sampleProducts = [
@@ -44,10 +43,30 @@ router.post("/seed", async (req, res) => {
       });
     }
 
-    // MongoDB connected - use database
-    await Product.deleteMany({});
-    const products = await Product.insertMany(sampleProducts);
-    
+    const supabase = getSupabase();
+
+    await supabase.from("products").delete().neq('id', '00000000-0000-0000-0000-000000000000');
+
+    const productsToInsert = sampleProducts.map(p => ({
+      name: p.name,
+      category: p.category,
+      price: p.price,
+      description: p.description || '',
+      image: p.image || '',
+      ar_model: p.arModel || '',
+      views: 0
+    }));
+
+    const { data: products, error } = await supabase
+      .from("products")
+      .insert(productsToInsert)
+      .select();
+
+    if (error) {
+      console.error("Seed error:", error);
+      return res.status(400).json({ message: error.message });
+    }
+
     res.status(201).json({
       message: "Products seeded successfully",
       count: products.length,
@@ -62,12 +81,34 @@ router.post("/seed", async (req, res) => {
 router.post("/", async (req, res) => {
   try {
     if (!getConnectionStatus()) {
-      return res.status(503).json({ 
+      return res.status(503).json({
         message: "Cannot add products in offline mode",
-        offline: true 
+        offline: true
       });
     }
-    const product = await Product.create(req.body);
+
+    const supabase = getSupabase();
+    const { name, category, price, description, image, model, arModel } = req.body;
+
+    const { data: product, error } = await supabase
+      .from("products")
+      .insert([{
+        name,
+        category,
+        price,
+        description: description || '',
+        image: image || '',
+        ar_model: arModel || model || '',
+        views: 0
+      }])
+      .select()
+      .single();
+
+    if (error) {
+      console.error("Insert error:", error);
+      return res.status(400).json({ message: error.message });
+    }
+
     res.status(201).json({
       message: "Product added successfully",
       product
@@ -83,10 +124,32 @@ router.get("/", async (req, res) => {
     if (!getConnectionStatus()) {
       return res.json(offlineProducts);
     }
-    const products = await Product.find();
-    res.json(products);
+
+    const supabase = getSupabase();
+    const { data: products, error } = await supabase
+      .from("products")
+      .select("*")
+      .order("created_at", { ascending: false });
+
+    if (error) {
+      console.error("Fetch error:", error);
+      return res.json(offlineProducts);
+    }
+
+    const formattedProducts = products.map(p => ({
+      id: p.id,
+      name: p.name,
+      category: p.category,
+      price: p.price,
+      description: p.description,
+      image: p.image,
+      model: p.ar_model,
+      arModel: p.ar_model,
+      views: p.views
+    }));
+
+    res.json(formattedProducts);
   } catch (error) {
-    // Fallback to offline products on error
     res.json(offlineProducts);
   }
 });
@@ -101,13 +164,36 @@ router.get("/:id", async (req, res) => {
       }
       return res.json(product);
     }
-    const product = await Product.findById(req.params.id);
-    if (!product) {
+
+    const supabase = getSupabase();
+    const { data: product, error } = await supabase
+      .from("products")
+      .select("*")
+      .eq("id", req.params.id)
+      .maybeSingle();
+
+    if (error || !product) {
+      const offlineProduct = offlineProducts.find(p => p._id === req.params.id);
+      if (offlineProduct) {
+        return res.json(offlineProduct);
+      }
       return res.status(404).json({ message: "Product not found" });
     }
-    res.json(product);
+
+    const formattedProduct = {
+      id: product.id,
+      name: product.name,
+      category: product.category,
+      price: product.price,
+      description: product.description,
+      image: product.image,
+      model: product.ar_model,
+      arModel: product.ar_model,
+      views: product.views
+    };
+
+    res.json(formattedProduct);
   } catch (error) {
-    // Try offline products on error
     const product = offlineProducts.find(p => p._id === req.params.id);
     if (product) {
       return res.json(product);
